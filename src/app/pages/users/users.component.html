@@ -1,0 +1,25 @@
+<section>
+    <div class="dashboard-content-container container">
+        <div class="users-table-container">
+            <div class="users-table-header">
+                <div class="users-table-cell">
+
+                </div>
+                <div class="users-table-cell">
+
+                </div>
+                <div class="users-table-cell">
+
+                </div>
+            </div>
+
+            <ul class="users-table-body">
+                <ng-container *ngFor="let user of users$()">
+                    <app-user-table-row [avatar]="user.avatar" [firstName]="user.first_name" [lastName]="user.last_name"
+                        [email]="user.email" [id]="user.id">
+                    </app-user-table-row>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+</section>
