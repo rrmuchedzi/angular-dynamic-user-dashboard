@@ -10,7 +10,7 @@ export class UsersComponent implements OnInit {
   currentPageNumber = 1;
 
   users$ = computed(() => this._usersService.users()[this.currentPageNumber]);
-  
+
   constructor(private _usersService: UserService) {}
 
   ngOnInit(): void {

@@ -13,7 +13,12 @@ import { SharedModule } from './shared/shared.module';
 import { UserTableRowComponent } from './pages/users/user-table-row/user-table-row.component';
 
 @NgModule({
-  declarations: [AppComponent, UsersComponent, UserDetailsComponent, UserTableRowComponent],
+  declarations: [
+    AppComponent,
+    UsersComponent,
+    UserDetailsComponent,
+    UserTableRowComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
