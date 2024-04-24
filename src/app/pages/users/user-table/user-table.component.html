@@ -1,51 +1,92 @@
 <div class="users-table-container">
-    <table>
-        <tr class="users-table-header">
-            <th class="users-table-cell"></th>
-            <th class="users-table-cell">Avatar</th>
-            <th class="users-table-cell">Name</th>
-            <th class="users-table-cell">Email</th>
-            <th class="users-table-cell"></th>
-        </tr>
+    <ng-container *ngIf="isLoadingUsers; else table_user_content">
+        <div class="users-table-placeholder">
+            <app-loader></app-loader>
+            <span>Loading users, please wait</span>
+        </div>
+    </ng-container>
 
-        <ng-container *ngFor="let user of users">
-            <tr class="user-table-row">
-                <td class="users-table-cell">
-                    {{ user.id }}
-                </td>
-                <td class="users-table-cell">
-                    <div class="user-avatar" [ngStyle]="{ 'background-image': 'url(' + user.avatar + ')' }"></div>
-                </td>
-                <td class="users-table-cell">{{ user.first_name }} {{ user.last_name }}</td>
-                <td class="users-table-cell">
-                    {{ user.email }}
-                </td>
-                <td class="users-table-cell"></td>
-            </tr>
-        </ng-container>
-    </table>
+    <ng-template #table_user_content>
+        <div class="users-table">
+            <div class="users-table-header">
+                <div class="users-table-cell"></div>
+                <div class="users-table-cell">Avatar</div>
+                <div class="users-table-cell">Name</div>
+                <div class="users-table-cell">Email</div>
+                <div class="users-table-cell">
+                    <div class="users-table-search-field">
+                        <ng-container *ngIf="searchFormControl.value.length > 0">
+                            <button type="button" class="close-button" (click)="handleClearSearchField()">
+                                <app-close-icon></app-close-icon>
+                            </button>
+                        </ng-container>
+                        <input type="text" [formControl]="searchFormControl" placeholder="Search for user" />
+                    </div>
+                </div>
+            </div>
+
+            <ng-container *ngIf="users.length === 0 && searchFormControl.value.length > 0; else user_results">
+                <tr class="no-search-results">
+                    <h4>No Results</h4>
+                    <span>We could not find any records to match your search criteria</span>
+
+                    <button type="button" class="clear-search-button" (click)="handleClearSearchField()">
+                        Clear Search
+                    </button>
+                </tr>
+            </ng-container>
+
+            <ng-template #user_results>
+                <ng-container *ngFor="let user of users">
+                    <div class="user-table-row">
+                        <div class="users-table-cell">
+                            {{ user.id }}
+                        </div>
+                        <div class="users-table-cell">
+                            <div
+                                class="user-avatar"
+                                [ngStyle]="{ 'background-image': 'url(' + user.avatar + ')' }"
+                            ></div>
+                        </div>
+                        <div class="users-table-cell">{{ user.first_name }} {{ user.last_name }}</div>
+                        <div class="users-table-cell">
+                            {{ user.email }}
+                        </div>
+                        <div class="users-table-cell">
+                            <a [routerLink]="'/user/' + user.id" class="users-table-view">
+                                <span>View</span>
+                                <app-arrow-back></app-arrow-back>
+                            </a>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-template>
+        </div>
+    </ng-template>
 
     <div class="table-footer">
         <span class="shown-table-records"> Showing {{ users.length }} users </span>
 
-        <ng-container *ngIf="isLoadingContent; else show_pagination_controls">
-            <app-loader></app-loader>
-        </ng-container>
+        <ng-container *ngIf="!isLoadingUsers">
+            <ng-container *ngIf="isLoadingContent; else show_pagination_controls">
+                <app-loader></app-loader>
+            </ng-container>
 
-        <ng-template #show_pagination_controls>
-            <div class="table-pagination">
-                <button type="button" class="table-pagination-button" (click)="handleChangePageRequest(false)">
-                    <app-chevron-icon></app-chevron-icon>
-                </button>
-                <div class="table-pagination-indicator">
-                    <span>{{ currentPage }}</span>
-                    <span>/</span>
-                    <span>{{ totalPages }}</span>
+            <ng-template #show_pagination_controls>
+                <div class="table-pagination">
+                    <button type="button" class="table-pagination-button" (click)="handleChangePageRequest(false)">
+                        <app-chevron-icon></app-chevron-icon>
+                    </button>
+                    <div class="table-pagination-indicator">
+                        <span>{{ currentPage }}</span>
+                        <span>/</span>
+                        <span>{{ totalPages }}</span>
+                    </div>
+                    <button type="button" class="table-pagination-button" (click)="handleChangePageRequest(true)">
+                        <app-chevron-icon></app-chevron-icon>
+                    </button>
                 </div>
-                <button type="button" class="table-pagination-button" (click)="handleChangePageRequest(true)">
-                    <app-chevron-icon></app-chevron-icon>
-                </button>
-            </div>
-        </ng-template>
+            </ng-template>
+        </ng-container>
     </div>
 </div>

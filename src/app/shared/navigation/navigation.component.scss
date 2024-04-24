@@ -10,4 +10,21 @@
     font-weight: 600;
     align-items: center;
     background-color: #5352ed;
+
+    .navigation-wrapper {
+        width: 100%;
+
+        gap: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .navigation-menu {
+        color: white;
+        font-size: 14px;
+        font-weight: 400;
+        cursor: pointer;
+        text-decoration: none;
+    }
 }
