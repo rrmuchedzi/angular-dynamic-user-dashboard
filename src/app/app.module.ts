@@ -13,6 +13,8 @@ import { SharedModule } from './shared/shared.module';
 import { UserTableComponent } from './pages/users/user-table/user-table.component';
 import { ChevronIconComponent } from './icons/chevron-icon/chevron-icon.component';
 import { ArrowBackComponent } from './icons/arrow-back/arrow-back.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CloseIconComponent } from './icons/close-icon/close-icon.component';
 
 @NgModule({
     declarations: [
@@ -22,11 +24,13 @@ import { ArrowBackComponent } from './icons/arrow-back/arrow-back.component';
         UserTableComponent,
         ChevronIconComponent,
         ArrowBackComponent,
+        CloseIconComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        ReactiveFormsModule,
         HttpClientModule,
         MatSnackBarModule,
         SharedModule,

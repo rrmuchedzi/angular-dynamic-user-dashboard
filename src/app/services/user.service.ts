@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 export class UserService {
     private _totalPages?: number;
     readonly currentPage = signal<number>(1);
+    readonly searchTerm = signal<string>('');
     readonly users = signal<Record<number, User[]>>({});
 
     // Subject for user details. Using BehaviorSubject to hold the current value.
@@ -16,7 +17,7 @@ export class UserService {
 
     // Tracks fetching status to prevent concurrent requests for the same data.
     private _isFetchingUsers = false;
-    private _isFetchingUserData = new Set<number>();
+    isFetchingUserData = new Set<number>();
 
     constructor(
         private _http: HttpClient,
@@ -54,17 +55,17 @@ export class UserService {
     }
 
     async getUserDetails(userId: number) {
-        if (this._isFetchingUserData.has(userId)) {
+        if (this.isFetchingUserData.has(userId)) {
             return;
         }
 
         const cachedUser = this._findUserInCache(userId);
-        if (cachedUser) {
+        if (cachedUser && cachedUser.support != null) {
             this.userDetailsSubject.next(cachedUser);
             return;
         }
 
-        this._isFetchingUserData.add(userId);
+        this.isFetchingUserData.add(userId);
         try {
             const response = await firstValueFrom(
                 this._http.get<GetUserDataResponse>(`${environment.apiUrl}/users/${userId}`),
@@ -81,7 +82,7 @@ export class UserService {
                 SnackbarTypes.Error,
             );
         } finally {
-            this._isFetchingUserData.delete(userId);
+            this.isFetchingUserData.delete(userId);
         }
     }
 

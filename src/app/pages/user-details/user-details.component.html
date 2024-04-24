@@ -7,27 +7,35 @@
     </div>
 
     <ng-container *ngIf="user != null">
-        <div class="dashboard-user-details-wrapper">
-            <div class="dashboard-user-details-card">
-                <div class="user-card-avatar" [ngStyle]="{ 'background-image': 'url(' + user.avatar + ')' }"></div>
-                <div class="user-card-details">
-                    <h1 class="user-card-name">{{ user.first_name }} {{ user.last_name }}</h1>
-                    <span class="user-card-email">{{ user.email }}</span>
+        <ng-container *ngIf="isFetchingUserData; else show_user_details">
+            <div class="user-data-loader">
+                <app-loader></app-loader>
+            </div>
+        </ng-container>
 
-                    <ng-container *ngIf="user.support != null">
-                        <div class="user-card-support-details">
-                            <div class="user-card-support-entry">
-                                <strong>URL: </strong>
-                                <span>{{ user.support.url }}</span>
+        <ng-template #show_user_details>
+            <div class="dashboard-user-details-wrapper">
+                <div class="dashboard-user-details-card">
+                    <div class="user-card-avatar" [ngStyle]="{ 'background-image': 'url(' + user.avatar + ')' }"></div>
+                    <div class="user-card-details">
+                        <h1 class="user-card-name">{{ user.first_name }} {{ user.last_name }}</h1>
+                        <span class="user-card-email">{{ user.email }}</span>
+
+                        <ng-container *ngIf="user.support != null">
+                            <div class="user-card-support-details">
+                                <div class="user-card-support-entry">
+                                    <strong>URL: </strong>
+                                    <span>{{ user.support.url }}</span>
+                                </div>
+                                <div class="user-card-support-entry">
+                                    <strong>Text: </strong>
+                                    <span>{{ user.support.text }}</span>
+                                </div>
                             </div>
-                            <div class="user-card-support-entry">
-                                <strong>Text: </strong>
-                                <span>{{ user.support.text }}</span>
-                            </div>
-                        </div>
-                    </ng-container>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
-        </div>
+        </ng-template>
     </ng-container>
 </div>

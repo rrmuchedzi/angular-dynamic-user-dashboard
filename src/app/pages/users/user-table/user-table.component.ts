@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { User } from 'src/app/types';
 
 @Component({
@@ -12,8 +13,8 @@ export class UserTableComponent {
     @Input() users: User[] = [];
     @Input() totalPages: number = 0;
     @Input() currentPage: number = 0;
+    @Input() searchFormControl!: FormControl;
     @Input() isLoadingContent: boolean = false;
-
     @Output() changePageEvent = new EventEmitter<number>();
 
     handleChangePageRequest(status: boolean) {
@@ -21,6 +22,10 @@ export class UserTableComponent {
         if (pageNumber != this.currentPage) {
             this.changePageEvent.emit(pageNumber);
         }
+    }
+
+    handleClearSearchField() {
+        this.searchFormControl.setValue('');
     }
 
     get isLoadingUsers() {

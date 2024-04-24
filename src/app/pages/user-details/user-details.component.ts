@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
@@ -8,10 +8,13 @@ import { User } from 'src/app/types';
     selector: 'app-user-details',
     templateUrl: './user-details.component.html',
     styleUrls: ['./user-details.component.scss'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class UserDetailsComponent implements OnInit, OnDestroy {
     private _userSubscription!: Subscription;
     user!: User;
+
+    userIdentification!: number;
 
     constructor(
         private _route: ActivatedRoute,
@@ -20,7 +23,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this._userSubscription = this._userService.userDetailsSubject.subscribe((user) => {
-            console.log('Got a sniff: ', user);
             if (user == null) {
                 return;
             }
@@ -28,17 +30,22 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         });
 
         // Get the user identification from the params.
-        const userIdentification = this._route.snapshot.params['id'];
+        this.userIdentification = this._route.snapshot.params['id'];
 
-        if (userIdentification != null) {
+        if (this.userIdentification != null) {
             // Get the user profile details.
-            this._userService.getUserDetails(parseInt(userIdentification, 10));
+            this._userService.getUserDetails(this.userIdentification);
         }
     }
 
     ngOnDestroy(): void {
+        // Unsubscribe from the user subject.
         if (this._userSubscription) {
             this._userSubscription.unsubscribe();
         }
+    }
+
+    get isFetchingUserData() {
+        return this._userService.isFetchingUserData.has(this.userIdentification);
     }
 }

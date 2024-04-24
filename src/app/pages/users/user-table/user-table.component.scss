@@ -5,14 +5,14 @@
     position: relative;
     border: 1px solid #dfe4ea;
 
-    table {
+    .users-table {
         width: 100%;
+        min-height: 438px;
         position: relative;
         border-collapse: collapse;
     }
 
-    td,
-    th {
+    .users-table-cell {
         padding: 8px;
         text-align: left;
     }
@@ -21,16 +21,23 @@
         height: 60px;
         background: #f1f2f6;
         border-bottom: 1px solid #dfe4ea;
+
+        display: grid;
+        align-items: center;
+        grid-template-columns: 0.5fr 1fr 2fr 2fr 4fr;
     }
 
     .user-table-row {
         &:not(:last-child) {
             border-bottom: 1px solid #dfe4ea;
         }
+
+        display: grid;
+        align-items: center;
+        grid-template-columns: 0.5fr 1fr 2fr 2fr 4fr;
     }
 
-    th:first-child,
-    td:first-child {
+    .users-table-cell:first-child {
         text-align: center;
     }
 
@@ -133,5 +140,66 @@
             width: 46px;
             height: 46px;
         }
+    }
+
+    .users-table-search-field {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: flex-end;
+
+        input {
+            outline: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #dfe4ea;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            cursor: pointer;
+            transform: translateY(-50%);
+
+            border: none;
+            outline: none;
+            background: transparent;
+
+            app-close-icon {
+                &,
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+
+    .no-search-results {
+        width: 100%;
+        height: 340px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .clear-search-button {
+        color: #ffffff;
+        margin-top: 24px;
+        border-radius: 8px;
+        background: #5352ed;
+
+        height: 36px;
+        padding: 0 16px;
+        outline: none;
+        border: none;
+        cursor: pointer;
     }
 }
