@@ -1,0 +1,13 @@
+<ng-container *ngIf="id != null && email != null && avatar != null && firstName != null && lastName != null">
+    <td class="users-table-cell">
+        {{ id }}
+    </td>
+    <td class="users-table-cell">
+        <div class="user-avatar" [ngStyle]="{ 'background-image': 'url(' + avatar + ')' }"></div>
+    </td>
+    <td class="users-table-cell">{{ firstName }} {{ lastName }}</td>
+    <td class="users-table-cell">
+        {{ email }}
+    </td>
+    <td class="users-table-cell"></td>
+</ng-container>

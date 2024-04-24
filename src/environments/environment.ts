@@ -8,5 +8,5 @@
  */
 
 export const environment = {
-  apiUrl: 'https://reqres.in/api',
+    apiUrl: 'https://reqres.in/api',
 };

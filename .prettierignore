@@ -1,0 +1,33 @@
+### Project specific ###
+aligner-rs/target
+api/types/db.ts
+apps/explore/compute/target
+apps/profile/compute/fixtures
+apps/profile/compute/reference
+apps/umi-matcher-rs/target
+auth/dist
+core/dist
+core/migration
+infra/data
+infra/files
+infra/postgres
+infra/igx/charts
+infra/igx/templates
+infra/igx/secrets.*
+profiler-rs/target
+ui/src/explore-wasm
+umi-rs/target
+.angular
+**/dist
+
+## Python cache
+**/.mypy_cache
+
+### Everything else ###
+# The slash at the end ensures that we ignore it also if it's a subdirectory
+.github
+.vscode
+node_modules/
+venv/
+pull_request_template.md
+package-lock.json

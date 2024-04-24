@@ -4,16 +4,16 @@ import { UsersComponent } from './pages/users/users.component';
 import { UserDetailsComponent } from './pages/user-details/user-details.component';
 
 const routes: Routes = [
-  { path: '', component: UsersComponent },
-  { path: 'user/:id', component: UserDetailsComponent },
-  {
-    path: '**',
-    redirectTo: '',
-  },
+    { path: '', component: UsersComponent },
+    { path: 'user/:id', component: UserDetailsComponent },
+    {
+        path: '**',
+        redirectTo: '',
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
 })
 export class AppRoutingModule {}

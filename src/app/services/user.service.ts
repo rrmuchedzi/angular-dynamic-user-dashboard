@@ -1,110 +1,116 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  GetUserDataResponse,
-  GetUsersResponse,
-  SnackbarTypes,
-  User,
-} from '../types';
+import { GetUserDataResponse, GetUsersResponse, SnackbarTypes, User } from '../types';
 import { SnackbarService } from './snackbar.service';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class UserService {
-  private _totalPages?: number;
-  readonly users = signal<Record<number, User[]>>({});
+    private _totalPages?: number;
+    readonly currentPage = signal<number>(1);
+    readonly users = signal<Record<number, User[]>>({});
 
-  // Subject for user details. Using BehaviorSubject to hold the current value.
-  readonly userDetailsSubject = new BehaviorSubject<User | null>(null);
+    // Subject for user details. Using BehaviorSubject to hold the current value.
+    readonly userDetailsSubject = new BehaviorSubject<User | null>(null);
 
-  // Tracks fetching status to prevent concurrent requests for the same data.
-  private isFetchingUsers = false;
-  private isFetchingUserData = new Set<number>();
+    // Tracks fetching status to prevent concurrent requests for the same data.
+    private _isFetchingUsers = false;
+    private _isFetchingUserData = new Set<number>();
 
-  constructor(
-    private _http: HttpClient,
-    private _snackbar: SnackbarService,
-  ) {}
+    constructor(
+        private _http: HttpClient,
+        private _snackbar: SnackbarService,
+    ) {}
 
-  async getUsers() {
-    if (this.isFetchingUsers) {
-      return;
-    }
-    this.isFetchingUsers = true;
+    async getUsers(pageNumber: number = this.currentPage()) {
+        // We ensure we avoid sending multiple requests to get users.
+        if (this._isFetchingUsers || this.users()[pageNumber] != null) {
+            this.currentPage.set(pageNumber);
+            return;
+        }
 
-    try {
-      const response = await firstValueFrom(
-        this._http.get<GetUsersResponse>(`${environment.apiUrl}/users?page=1`),
-      );
-      const users = this.users();
-      users[response.page] = response.data;
+        this._isFetchingUsers = true;
 
-      this.users.set(users);
+        try {
+            const response = await firstValueFrom(
+                this._http.get<GetUsersResponse>(`${environment.apiUrl}/users?page=${pageNumber ?? 1}`),
+            );
+            const users = this.users();
+            users[response.page] = response.data;
 
-      this._totalPages = response.total_pages;
-    } catch (error) {
-      this._snackbar.showSnackBarNotification(
-        `Couldn't retrieve the dashboard users. Please try again.`,
-        SnackbarTypes.Error,
-      );
-    } finally {
-      this.isFetchingUsers = false;
-    }
-  }
+            this.users.set(users);
 
-  async getUserDetails(userId: number) {
-    if (this.isFetchingUserData.has(userId)) {
-      return;
-    }
-
-    const cachedUser = this._findUserInCache(userId);
-    if (cachedUser) {
-      this.userDetailsSubject.next(cachedUser);
-      return;
+            this.currentPage.set(pageNumber ?? response.page);
+            this._totalPages = response.total_pages;
+        } catch (error) {
+            this._snackbar.showSnackBarNotification(
+                `Couldn't retrieve the dashboard users. Please try again.`,
+                SnackbarTypes.Error,
+            );
+        } finally {
+            this._isFetchingUsers = false;
+        }
     }
 
-    this.isFetchingUserData.add(userId);
-    try {
-      const response = await firstValueFrom(
-        this._http.get<GetUserDataResponse>(
-          `${environment.apiUrl}/user/${userId}`,
-        ),
-      );
-      this._updateUserInCache(userId, response.data);
-      this.userDetailsSubject.next(response.data);
-    } catch (error) {
-      this._snackbar.showSnackBarNotification(
-        `Couldn't retrieve details for user ID ${userId}.`,
-        SnackbarTypes.Error,
-      );
-    } finally {
-      this.isFetchingUserData.delete(userId);
+    async getUserDetails(userId: number) {
+        if (this._isFetchingUserData.has(userId)) {
+            return;
+        }
+
+        const cachedUser = this._findUserInCache(userId);
+        if (cachedUser) {
+            this.userDetailsSubject.next(cachedUser);
+            return;
+        }
+
+        this._isFetchingUserData.add(userId);
+        try {
+            const response = await firstValueFrom(
+                this._http.get<GetUserDataResponse>(`${environment.apiUrl}/user/${userId}`),
+            );
+            this._updateUserInCache(userId, response.data);
+            this.userDetailsSubject.next(response.data);
+        } catch (error) {
+            this._snackbar.showSnackBarNotification(
+                `Couldn't retrieve details for user ID ${userId}.`,
+                SnackbarTypes.Error,
+            );
+        } finally {
+            this._isFetchingUserData.delete(userId);
+        }
     }
-  }
 
-  private _findUserInCache(userId: number) {
-    const users = this.users();
-    for (const page of Object.values(users)) {
-      const foundUser = page.find((user) => user.id === userId);
-
-      if (foundUser) {
-        return foundUser;
-      }
+    get totalPages() {
+        return this._totalPages ?? 0;
     }
 
-    return;
-  }
-
-  private _updateUserInCache(userId: number, data: User) {
-    const users = this.users();
-    for (const page of Object.values(users)) {
-      const idx = page.findIndex((user) => user.id === userId);
-      if (idx !== -1) {
-        page[idx] = { ...page[idx], ...data };
-        this.users.set(users);
-        break;
-      }
+    get isFetchingUsers() {
+        return this._isFetchingUsers;
     }
-  }
+
+    private _findUserInCache(userId: number) {
+        const users = this.users();
+        for (const page of Object.values(users)) {
+            const foundUser = page.find((user) => user.id === userId);
+
+            if (foundUser) {
+                return foundUser;
+            }
+        }
+
+        return;
+    }
+
+    private _updateUserInCache(userId: number, data: User) {
+        const users = this.users();
+        for (const page of Object.values(users)) {
+            const idx = page.findIndex((user) => user.id === userId);
+            if (idx !== -1) {
+                page[idx] = { ...page[idx], ...data };
+                this.users.set(users);
+                break;
+            }
+        }
+    }
 }

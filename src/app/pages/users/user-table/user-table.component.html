@@ -1,0 +1,51 @@
+<div class="users-table-container">
+    <table>
+        <tr class="users-table-header">
+            <th class="users-table-cell"></th>
+            <th class="users-table-cell">Avatar</th>
+            <th class="users-table-cell">Name</th>
+            <th class="users-table-cell">Email</th>
+            <th class="users-table-cell"></th>
+        </tr>
+
+        <ng-container *ngFor="let user of users">
+            <tr class="user-table-row">
+                <td class="users-table-cell">
+                    {{ user.id }}
+                </td>
+                <td class="users-table-cell">
+                    <div class="user-avatar" [ngStyle]="{ 'background-image': 'url(' + user.avatar + ')' }"></div>
+                </td>
+                <td class="users-table-cell">{{ user.first_name }} {{ user.last_name }}</td>
+                <td class="users-table-cell">
+                    {{ user.email }}
+                </td>
+                <td class="users-table-cell"></td>
+            </tr>
+        </ng-container>
+    </table>
+
+    <div class="table-footer">
+        <span class="shown-table-records"> Showing {{ users.length }} users </span>
+
+        <ng-container *ngIf="isLoadingContent; else show_pagination_controls">
+            <app-loader></app-loader>
+        </ng-container>
+
+        <ng-template #show_pagination_controls>
+            <div class="table-pagination">
+                <button type="button" class="table-pagination-button" (click)="handleChangePageRequest(false)">
+                    <app-chevron-icon></app-chevron-icon>
+                </button>
+                <div class="table-pagination-indicator">
+                    <span>{{ currentPage }}</span>
+                    <span>/</span>
+                    <span>{{ totalPages }}</span>
+                </div>
+                <button type="button" class="table-pagination-button" (click)="handleChangePageRequest(true)">
+                    <app-chevron-icon></app-chevron-icon>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>

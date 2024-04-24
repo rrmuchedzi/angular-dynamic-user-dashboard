@@ -5,16 +5,16 @@ import { SnackbarResource, SnackbarTypes } from '../types';
 
 @Injectable()
 export class SnackbarService {
-  constructor(private _snackbar: MatSnackBar) {}
+    constructor(private _snackbar: MatSnackBar) {}
 
-  showSnackBarNotification(message: string, type: SnackbarTypes) {
-    const data: SnackbarResource = {
-      message,
-      type,
-    };
-    this._snackbar.openFromComponent(SnackbarComponent, {
-      duration: 8000,
-      data,
-    });
-  }
+    showSnackBarNotification(message: string, type: SnackbarTypes) {
+        const data: SnackbarResource = {
+            message,
+            type,
+        };
+        this._snackbar.openFromComponent(SnackbarComponent, {
+            duration: 8000,
+            data,
+        });
+    }
 }
