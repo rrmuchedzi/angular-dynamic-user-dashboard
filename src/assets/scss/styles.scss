@@ -25,7 +25,43 @@ body {
 }
 
 .dashboard-content-wrapper {
-    padding: 24px 0;
+    padding-top: 46px;
+    padding-bottom: 24px;
     margin-top: 70px;
     min-height: calc(100vh - 70px);
+}
+
+.breadcrumbs-section {
+    gap: 12px;
+    position: relative;
+
+    &,
+    .breadcrumbs-button {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .breadcrumbs-button {
+        gap: 4px;
+        line-height: 24px;
+        color: #1f1f1f;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    app-arrow-back {
+        &,
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #a4b0be;
+        transform: rotate(180deg);
+    }
 }
