@@ -30,7 +30,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this._usersService.getUsers();
 
-        // Subscribe to the search form control for changes.
+        // Subscribe to the search form control for changes and debounce it to give the user time to complete typing the search query before initiating the search.
         this._searchFormSubscription = this.searchFormControl.valueChanges
             .pipe(debounceTime(250), distinctUntilChanged())
             .subscribe((searchQuery) => {
@@ -46,6 +46,11 @@ export class UsersComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles page change event.
+     *
+     * @param pageNumber Next page number.
+     */
     handlePageChangeEvent(pageNumber: number) {
         this._usersService.getUsers(pageNumber);
     }

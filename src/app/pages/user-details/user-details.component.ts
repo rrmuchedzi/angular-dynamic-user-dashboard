@@ -11,9 +11,10 @@ import { User } from 'src/app/types';
     encapsulation: ViewEncapsulation.None,
 })
 export class UserDetailsComponent implements OnInit, OnDestroy {
-    private _userSubscription!: Subscription;
     user!: User;
+    private _userSubscription!: Subscription;
 
+    // Store the current user identification number.
     userIdentification!: number;
 
     constructor(
@@ -22,6 +23,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
+        // Subscribe to the user details subject for notifications when the user data changes.
         this._userSubscription = this._userService.userDetailsSubject.subscribe((user) => {
             if (user == null) {
                 return;

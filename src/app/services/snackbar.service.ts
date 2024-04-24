@@ -7,6 +7,12 @@ import { SnackbarResource, SnackbarTypes } from '../types';
 export class SnackbarService {
     constructor(private _snackbar: MatSnackBar) {}
 
+    /**
+     * Sends snackbar notifications for different important events.
+     *
+     * @param message Snackbar message
+     * @param type Snackbar message type
+     */
     showSnackBarNotification(message: string, type: SnackbarTypes) {
         const data: SnackbarResource = {
             message,

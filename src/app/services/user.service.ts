@@ -24,6 +24,11 @@ export class UserService {
         private _snackbar: SnackbarService,
     ) {}
 
+    /**
+     * Handles the request to fetch the users from the API.
+     *
+     * @param pageNumber Page number identification.
+     */
     async getUsers(pageNumber: number = this.currentPage()) {
         // We ensure we avoid sending multiple requests to get users.
         if (this._isFetchingUsers || this.users()[pageNumber] != null) {
@@ -37,11 +42,14 @@ export class UserService {
             const response = await firstValueFrom(
                 this._http.get<GetUsersResponse>(`${environment.apiUrl}/users?page=${pageNumber ?? 1}`),
             );
+
+            // Update the user records.
             const users = this.users();
             users[response.page] = response.data;
 
             this.users.set(users);
 
+            // Update the current page and number of total pages.
             this.currentPage.set(pageNumber ?? response.page);
             this._totalPages = response.total_pages;
         } catch (error) {
@@ -54,6 +62,11 @@ export class UserService {
         }
     }
 
+    /**
+     * Handles the request to fetch user data.
+     *
+     * @param userId User identification.
+     */
     async getUserDetails(userId: number) {
         if (this.isFetchingUserData.has(userId)) {
             return;
@@ -74,7 +87,11 @@ export class UserService {
                 ...response.data,
                 support: response.support,
             };
+
+            // If the user exists on our state, we update the user record.
             this._updateUserInCache(userId, userData);
+
+            // Notify subscribers about the changes.
             this.userDetailsSubject.next(userData);
         } catch (error) {
             this._snackbar.showSnackBarNotification(
@@ -94,6 +111,12 @@ export class UserService {
         return this._isFetchingUsers;
     }
 
+    /**
+     * Finds the user data from the state cache.
+     *
+     * @param userId User identification
+     * @returns User data
+     */
     private _findUserInCache(userId: number) {
         const users = this.users();
         for (const page of Object.values(users)) {
@@ -107,6 +130,12 @@ export class UserService {
         return;
     }
 
+    /**
+     * Updates the user on our state when the data changes.
+     *
+     * @param userId  User identification
+     * @param data User updated data.
+     */
     private _updateUserInCache(userId: number, data: User) {
         const users = this.users();
         for (const page of Object.values(users)) {
