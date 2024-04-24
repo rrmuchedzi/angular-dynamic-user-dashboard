@@ -1,1 +1,33 @@
-<p>user-details works!</p>
+<div class="dashboard-user-details-container">
+    <div class="breadcrumbs-section">
+        <a routerLink="/" class="breadcrumbs-button">
+            <app-arrow-back></app-arrow-back>
+            <span>Back to users</span>
+        </a>
+    </div>
+
+    <ng-container *ngIf="user != null">
+        <div class="dashboard-user-details-wrapper">
+            <div class="dashboard-user-details-card">
+                <div class="user-card-avatar" [ngStyle]="{ 'background-image': 'url(' + user.avatar + ')' }"></div>
+                <div class="user-card-details">
+                    <h1 class="user-card-name">{{ user.first_name }} {{ user.last_name }}</h1>
+                    <span class="user-card-email">{{ user.email }}</span>
+
+                    <ng-container *ngIf="user.support != null">
+                        <div class="user-card-support-details">
+                            <div class="user-card-support-entry">
+                                <strong>URL: </strong>
+                                <span>{{ user.support.url }}</span>
+                            </div>
+                            <div class="user-card-support-entry">
+                                <strong>Text: </strong>
+                                <span>{{ user.support.text }}</span>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

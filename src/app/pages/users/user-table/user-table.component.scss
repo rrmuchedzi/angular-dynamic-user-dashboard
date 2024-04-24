@@ -96,4 +96,42 @@
             justify-content: center;
         }
     }
+
+    .users-table-view {
+        gap: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        text-decoration: none;
+        color: #5352ed;
+
+        app-arrow-back {
+            &,
+            svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a4b0be;
+        }
+    }
+
+    .users-table-placeholder {
+        height: 400px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 24px;
+
+        .btn-loader {
+            width: 46px;
+            height: 46px;
+        }
+    }
 }

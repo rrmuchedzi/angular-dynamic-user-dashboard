@@ -1,11 +1,7 @@
-<section>
-    <div class="dashboard-content-container container">
-        <app-user-table
-            [users]="users$()"
-            [totalPages]="totalPages"
-            [currentPage]="currentPage"
-            [isLoadingContent]="isFetchingUsers"
-            (changePageEvent)="handlePageChangeEvent($event)"
-        ></app-user-table>
-    </div>
-</section>
+<app-user-table
+    [users]="users$()"
+    [totalPages]="totalPages"
+    [currentPage]="currentPage"
+    [isLoadingContent]="isFetchingUsers"
+    (changePageEvent)="handlePageChangeEvent($event)"
+></app-user-table>

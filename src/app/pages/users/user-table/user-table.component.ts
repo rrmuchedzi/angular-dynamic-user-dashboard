@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { User } from 'src/app/types';
 
 @Component({
     selector: 'app-user-table',
     templateUrl: './user-table.component.html',
     styleUrls: ['./user-table.component.scss'],
+    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserTableComponent {
@@ -20,6 +21,10 @@ export class UserTableComponent {
         if (pageNumber != this.currentPage) {
             this.changePageEvent.emit(pageNumber);
         }
+    }
+
+    get isLoadingUsers() {
+        return this.users.length === 0 && this.isLoadingContent;
     }
 
     private _getNextPageNumber(status: boolean) {

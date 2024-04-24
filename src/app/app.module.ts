@@ -10,7 +10,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UsersComponent } from './pages/users/users.component';
 import { UserDetailsComponent } from './pages/user-details/user-details.component';
 import { SharedModule } from './shared/shared.module';
-import { UserTableRowComponent } from './pages/users/user-table/user-table-row/user-table-row.component';
 import { UserTableComponent } from './pages/users/user-table/user-table.component';
 import { ChevronIconComponent } from './icons/chevron-icon/chevron-icon.component';
 import { ArrowBackComponent } from './icons/arrow-back/arrow-back.component';
@@ -20,7 +19,6 @@ import { ArrowBackComponent } from './icons/arrow-back/arrow-back.component';
         AppComponent,
         UsersComponent,
         UserDetailsComponent,
-        UserTableRowComponent,
         UserTableComponent,
         ChevronIconComponent,
         ArrowBackComponent,

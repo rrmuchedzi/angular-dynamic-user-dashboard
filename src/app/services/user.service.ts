@@ -67,10 +67,14 @@ export class UserService {
         this._isFetchingUserData.add(userId);
         try {
             const response = await firstValueFrom(
-                this._http.get<GetUserDataResponse>(`${environment.apiUrl}/user/${userId}`),
+                this._http.get<GetUserDataResponse>(`${environment.apiUrl}/users/${userId}`),
             );
-            this._updateUserInCache(userId, response.data);
-            this.userDetailsSubject.next(response.data);
+            const userData: User = {
+                ...response.data,
+                support: response.support,
+            };
+            this._updateUserInCache(userId, userData);
+            this.userDetailsSubject.next(userData);
         } catch (error) {
             this._snackbar.showSnackBarNotification(
                 `Couldn't retrieve details for user ID ${userId}.`,
